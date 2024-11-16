@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 
 import {
   Select,
@@ -11,66 +12,100 @@ import {
 } from '@/components/ui/select';
 
 const Selector = () => {
+  const years = Array.from(
+    { length: 2026 - 1950 + 1 },
+    (_, index) => 2026 - index
+  );
+
+  const [makes, setMakes] = useState<string[]>([]); // Updated to an array
+  const [dropValue, setDropValue] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch car makes
+  useEffect(() => {
+    const fetchMakes = async () => {
+      try {
+        const response = await fetch('/api/getMakes');
+        const result = await response.json();
+        if (response.ok) {
+          setMakes(
+            result.data.map((item: { MakeName: string }) => item.MakeName)
+          );
+        } else {
+          setError(result.error || 'Failed to fetch makes.');
+        }
+      } catch (err) {
+        setError('Failed to fetch data.');
+      }
+    };
+    fetchMakes();
+  }, []);
+
+  // Handle selection change
+  const updateDropValue = (value: string) => {
+    setDropValue(value);
+  };
+
+  console.log(dropValue);
+
   return (
-    <Select>
-      <SelectTrigger className="w-[280px]">
-        <SelectValue placeholder="Select a timezone" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>North America</SelectLabel>
-          <SelectItem value="est">Eastern Standard Time (EST)</SelectItem>
-          <SelectItem value="cst">Central Standard Time (CST)</SelectItem>
-          <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
-          <SelectItem value="pst">Pacific Standard Time (PST)</SelectItem>
-          <SelectItem value="akst">Alaska Standard Time (AKST)</SelectItem>
-          <SelectItem value="hst">Hawaii Standard Time (HST)</SelectItem>
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>Europe & Africa</SelectLabel>
-          <SelectItem value="gmt">Greenwich Mean Time (GMT)</SelectItem>
-          <SelectItem value="cet">Central European Time (CET)</SelectItem>
-          <SelectItem value="eet">Eastern European Time (EET)</SelectItem>
-          <SelectItem value="west">
-            Western European Summer Time (WEST)
-          </SelectItem>
-          <SelectItem value="cat">Central Africa Time (CAT)</SelectItem>
-          <SelectItem value="eat">East Africa Time (EAT)</SelectItem>
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>Asia</SelectLabel>
-          <SelectItem value="msk">Moscow Time (MSK)</SelectItem>
-          <SelectItem value="ist">India Standard Time (IST)</SelectItem>
-          <SelectItem value="cst_china">China Standard Time (CST)</SelectItem>
-          <SelectItem value="jst">Japan Standard Time (JST)</SelectItem>
-          <SelectItem value="kst">Korea Standard Time (KST)</SelectItem>
-          <SelectItem value="ist_indonesia">
-            Indonesia Central Standard Time (WITA)
-          </SelectItem>
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>Australia & Pacific</SelectLabel>
-          <SelectItem value="awst">
-            Australian Western Standard Time (AWST)
-          </SelectItem>
-          <SelectItem value="acst">
-            Australian Central Standard Time (ACST)
-          </SelectItem>
-          <SelectItem value="aest">
-            Australian Eastern Standard Time (AEST)
-          </SelectItem>
-          <SelectItem value="nzst">New Zealand Standard Time (NZST)</SelectItem>
-          <SelectItem value="fjt">Fiji Time (FJT)</SelectItem>
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>South America</SelectLabel>
-          <SelectItem value="art">Argentina Time (ART)</SelectItem>
-          <SelectItem value="bot">Bolivia Time (BOT)</SelectItem>
-          <SelectItem value="brt">Brasilia Time (BRT)</SelectItem>
-          <SelectItem value="clt">Chile Standard Time (CLT)</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className="grid items-center min-h-screen gap-6">
+      {/* Year Dropdown */}
+      <Select onValueChange={updateDropValue}>
+        <SelectTrigger className="w-[400px]">
+          <SelectValue placeholder="Select a year" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Car Model Year: {dropValue}</SelectLabel>
+            {years.map((year) => (
+              <SelectItem key={year} value={year.toString()}>
+                {year}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+      {/* Makes Dropdown */}
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Select a Make" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Car Make</SelectLabel>
+            {makes.length > 0 ? (
+              makes.map((make, index) => (
+                <SelectItem key={index} value={make}>
+                  {make}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem value="No makes available" disabled>
+                No makes available
+              </SelectItem>
+            )}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+      {/* Models Dropdown (Placeholder for now) */}
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Select a Model" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Car Model</SelectLabel>
+            <SelectItem value="TEST">MODEL</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+      {/* Error Message */}
+      {error && <p className="text-red-500">{error}</p>}
+    </div>
   );
 };
 
