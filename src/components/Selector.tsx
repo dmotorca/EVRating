@@ -20,6 +20,7 @@ const Selector = () => {
   const [makes, setMakes] = useState<string[]>([]); // Updated to an array
   const [dropValue, setDropValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [models, setModels] = useState<string[]>([]);
 
   // Fetch car makes
   useEffect(() => {
@@ -45,8 +46,31 @@ const Selector = () => {
   const updateDropValue = (value: string) => {
     setDropValue(value);
   };
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        const response = await fetch('/api/getModels');
+        const result = await response.json();
 
-  console.log(dropValue);
+        // Validate response and map model names
+        if (response.ok && result.data?.Results) {
+          console.log('Fetched models: ', result.data.Results);
+          setModels(
+            result.data.Results.map(
+              (item: { Model_Name: string }) => item.Model_Name
+            )
+          );
+        } else {
+          setError(result.error || 'Unexpected API response structure.');
+        }
+      } catch (err) {
+        console.error('Error fetching models:', err);
+        setError('Failed to fetch models data. Please try again later.');
+      }
+    };
+
+    fetchModels();
+  }, []);
 
   return (
     <div className="grid items-center min-h-screen gap-6">
@@ -98,7 +122,17 @@ const Selector = () => {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Car Model</SelectLabel>
-            <SelectItem value="TEST">MODEL</SelectItem>
+            {models.length > 0 ? (
+              models.map((model, index) => (
+                <SelectItem key={index} value={model}>
+                  {model}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem value="No models available" disabled>
+                No makes available
+              </SelectItem>
+            )}
           </SelectGroup>
         </SelectContent>
       </Select>
