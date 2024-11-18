@@ -19,6 +19,7 @@ const Selector = () => {
 
   const [makes, setMakes] = useState<string[]>([]); // Updated to an array
   const [dropValue, setDropValue] = useState<string>('');
+  const [makeValue, setMakeValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [models, setModels] = useState<string[]>([]);
 
@@ -46,6 +47,11 @@ const Selector = () => {
   const updateDropValue = (value: string) => {
     setDropValue(value);
   };
+
+  const updateMakeValue = (value: string) => {
+    setMakeValue(value);
+  };
+
   useEffect(() => {
     const fetchModels = async () => {
       try {
@@ -73,10 +79,10 @@ const Selector = () => {
   }, []);
 
   return (
-    <div className="grid items-center min-h-screen gap-6">
+    <div className="grid items-center gap-20 pt-8">
       {/* Year Dropdown */}
       <Select onValueChange={updateDropValue}>
-        <SelectTrigger className="w-[400px]">
+        <SelectTrigger className="w-1/2">
           <SelectValue placeholder="Select a year" />
         </SelectTrigger>
         <SelectContent>
@@ -92,13 +98,13 @@ const Selector = () => {
       </Select>
 
       {/* Makes Dropdown */}
-      <Select>
+      <Select onValueChange={updateMakeValue}>
         <SelectTrigger>
           <SelectValue placeholder="Select a Make" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Car Make</SelectLabel>
+            <SelectLabel>Car Make: {makeValue}</SelectLabel>
             {makes.length > 0 ? (
               makes.map((make, index) => (
                 <SelectItem key={index} value={make}>
