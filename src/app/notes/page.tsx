@@ -1,25 +1,17 @@
-import { get } from 'http';
 import { createClient } from '../../../utils/supabase/server';
 
-type Make = {
-  MakeId: number;
-  MakeName: string;
-};
-
-export default async function FetchVehicleData() {
+export default async function FetchVehicleYearCount() {
   const supabase = await createClient();
 
-  try {
-    const response = await fetch(
-      'https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json'
-    );
-    if (!response.ok) {
-      throw new Error('Could not fetch resource');
-    }
+  // Fetch the count of unique years
+  const { count, error } = await supabase
+    .from('vehicle_table_and_MPG')
+    .select('year', { count: 'exact', head: true }); // head: true means no rows are returned, only the count
 
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {}
+  if (error) {
+    console.error('Error fetching year count:', error.message);
+    return;
+  }
+
+  console.log(`Total years in database: ${count}`);
 }
-
-//const { data: users } = await supabase.from('users').select();
