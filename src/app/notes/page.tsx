@@ -1,17 +1,23 @@
+'use server';
+
 import { createClient } from '../../../utils/supabase/server';
 
-export default async function FetchVehicleYearCount() {
+export default async function FetchVehicleModels() {
   const supabase = await createClient();
 
   // Fetch the count of unique years
-  const { count, error } = await supabase
+  let { data: vehicleData, error } = await supabase
     .from('vehicle_table_and_MPG')
-    .select('year', { count: 'exact', head: true }); // head: true means no rows are returned, only the count
+    .select('baseModel'); // head: true means no rows are returned, only the count
 
   if (error) {
     console.error('Error fetching year count:', error.message);
-    return;
-  }
+    return [];
+  } else if (vehicleData) {
+    const baseModels = vehicleData.map(
+      (item: { baseModel: string }) => item.baseModel
+    );
 
-  console.log(`Total years in database: ${count}`);
+    return baseModels;
+  }
 }
