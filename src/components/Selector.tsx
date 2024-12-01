@@ -63,7 +63,7 @@ const Selector = () => {
           console.log('Fetched models: ', result.data.Results);
           setModels(
             result.data.Results.map(
-              (item: { Model_Name: string }) => item.Model_Name
+              (item: { baseModel: string }) => item.baseModel
             )
           );
         } else {

@@ -1,13 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import FetchVehicleModels from '@/app/notes/page';
+import 
 
 const DisplayModels = () => {
   const [models, setModels] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const baseModels = await FetchVehicleModels(); // Call the API function
+      const baseModels = await setModel(); // Call the API function
+        const response = await fetch('/api/getMakes');
       setModels(baseModels!); // Set the state with fetched models
     };
 
