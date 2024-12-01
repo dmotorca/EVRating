@@ -1,19 +1,31 @@
-'use client';
+'use client'; // Client-side component
 import React, { useEffect, useState } from 'react';
-import 
 
 const DisplayModels = () => {
-  const [models, setModels] = useState<string[]>([]);
+  const [models, setModels] = useState<string[]>([]); // State to store models
+  const [error, setError] = useState<string | null>(null); // State to store error messages
 
   useEffect(() => {
     const fetchData = async () => {
-      const baseModels = await setModel(); // Call the API function
-        const response = await fetch('/api/getMakes');
-      setModels(baseModels!); // Set the state with fetched models
+      try {
+        const response = await fetch('/api/getModels'); // Fetch from your API route
+        if (!response.ok) {
+          throw new Error('Failed to fetch models');
+        }
+        const result = await response.json();
+        setModels(result.data.map((item: any) => item.baseModel)); // Extract and set the models
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'An unknown error occurred'
+        );
+      }
     };
 
-    fetchData(); // Execute the fetch function
+    fetchData(); // Call the fetch function on component mount
   }, []);
+
+  if (error) return <div>Error: {error}</div>; // Handle errors
+  if (models.length === 0) return <div>Loading...</div>; // Show loading state
 
   return (
     <div>
