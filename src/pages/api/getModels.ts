@@ -4,7 +4,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '@/lib/supabaseClient';
 
-
 export default async function getModels(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -12,7 +11,9 @@ export default async function getModels(req: NextApiRequest, res: NextApiRespons
 
   const {data, error } = await supabase
   .from("vehicle_table_and_MPG")
-  .select("baseModel");
+  .select("baseModel")
+  .eq('make', make);
+
   if (data) {
     // Extract baseModel and filter unique values
     const uniqueModels = Array.from(new Set(data.map((item: any) => item.baseModel)));

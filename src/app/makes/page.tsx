@@ -1,48 +1,33 @@
-/*
 'use client';
-import React, { useState, useEffect } from 'react';
-import Selector from '@/components/Selector';
 
-const FetchAndDisplayMakes = () => {
-  const [models, setMakes] = useState<string[]>([]); // State to store the models array
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+import React, { useState } from 'react';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/getMakes'); // Fetch data from API
-        if (!response.ok) {
-          throw new Error('Failed to fetch models');
-        }
-        const result = await response.json();
-        setMakes(result.uniqueMakes); // Set the array from the API response
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'An unknown error occurred'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+const VehicleSelector = () => {
+  const [selectedMake, setSelectedMake] = useState<string>('Toyota'); // Default make
 
-    fetchData();
-  }, []);
+  const fetchModels = async () => {
+    try {
+      // Pass the `selectedMake` to the API
+      const response = await fetch(`/api/getModelsByMake?make=${selectedMake}`);
+      const data = await response.json();
 
-  if (loading) return <div>Loading...</div>; // Show loading state
-  if (error) return <div>Error: {error}</div>; // Handle errors
+      console.log(data.uniqueModels); // Log or handle the response data
+    } catch (error) {
+      console.error('Error fetching models:', error);
+    }
+  };
 
   return (
     <div>
-        <h2>Select a Vehicle Model</h2>
-      <Selector
-        optionsYears={years}
-        optionsModels={models}
-        optionsMakes={makes}
-      />
+      <h1>Select Vehicle Make</h1>
+      <select onChange={(e) => setSelectedMake(e.target.value)}>
+        <option value="Toyota">Toyota</option>
+        <option value="Honda">Honda</option>
+        <option value="Ford">Ford</option>
+      </select>
+      <button onClick={fetchModels}>Fetch Models</button>
     </div>
   );
 };
 
-export default FetchAndDisplayMakes;
-*/
+export default VehicleSelector;
