@@ -9,18 +9,24 @@ export default async function getYears(req: NextApiRequest, res: NextApiResponse
 
   const { data, error } = await supabase
     .from('vehicle_table_and_MPG')
-    .select('year'); // Fetch 'year'
-
-    console.log(data)
+    .select('year'); // Fetch all rows for 'year'
 
   if (error) {
     return res.status(500).json({ error: error.message });
   }
 
   if (data) {
-    // Extract unique 'year' values
-    const uniqueYears = Array.from(new Set(data.map((item: any) => item.year)));
+    // Debugging: Check the raw Supabase response
+    console.log('Raw data from Supabase:', data);
 
-    return res.status(200).json({ uniqueYears }); // Return unique values
+    // Create a distinct list of years
+    const distinctYears = Array.from(new Set(data.map((item) => item.year)));
+
+    // Debugging: Check the processed unique years
+    console.log('Processed distinct years:', distinctYears);
+
+    return res.status(200).json({ distinctYears });
   }
+
+  return res.status(500).json({ error: 'Unexpected error occurred.' });
 }

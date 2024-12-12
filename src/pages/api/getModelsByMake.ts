@@ -9,6 +9,7 @@ export default async function getModelsByMake(req: NextApiRequest, res: NextApiR
   // Extract the `make` parameter from the query string
   const { make } = req.query;
 
+
   if (!make || typeof make !== 'string') {
     return res.status(400).json({ error: 'Missing or invalid make parameter' });
   }
