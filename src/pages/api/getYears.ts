@@ -1,4 +1,3 @@
-// src/pages/api/getYears.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -7,26 +6,26 @@ export default async function getYears(req: NextApiRequest, res: NextApiResponse
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { data, error } = await supabase
-    .from('vehicle_table_and_MPG')
-    .select('year'); // Fetch all rows for 'year'
+  // Extract the `make` parameter from the query string
+  const { years } = req.query;
 
-  if (error) {
-    return res.status(500).json({ error: error.message });
+
+
+  if (!years || typeof years !== 'string') {
+    return res.status(400).json({ error: 'Missing or invalid make parameter' });
   }
 
-  if (data) {
-    // Debugging: Check the raw Supabase response
-    console.log('Raw data from Supabase:', data);
+  try {
+    // Query database for models based on the `make`
+    const { data, error } = await supabase
+      .from('vehicle_table_and_MPG')
+      .select('years')
 
-    // Create a distinct list of years
-    const distinctYears = Array.from(new Set(data.map((item) => item.year)));
+    if (error) throw error;
 
-    // Debugging: Check the processed unique years
-    console.log('Processed distinct years:', distinctYears);
-
-    return res.status(200).json({ distinctYears });
+    // Extract unique models
+    return res.status(200).json({ years});
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch years' });
   }
-
-  return res.status(500).json({ error: 'Unexpected error occurred.' });
 }

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   Select,
@@ -13,18 +13,39 @@ import {
 interface SelectorProps {
   optionsYears: string[]; // Array of years
   optionsMakes: string[]; // Array of makes
-  optionsModels: string[]; // Array of models
 }
 
-const Selector: React.FC<SelectorProps> = ({
-  optionsYears,
-  optionsMakes,
-  optionsModels,
-}) => {
+const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
   // State for each selection
   const [selectedYear, setSelectedYear] = useState<string>('');
   const [selectedMake, setSelectedMake] = useState<string>('');
-  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [optionsModels, setOptionsModels] = useState<string[]>([]); // Models dynamically fetched
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch models dynamically based on selected make and year
+  useEffect(() => {
+    const fetchModels = async () => {
+      if (selectedYear && selectedMake) {
+        try {
+          const response = await fetch(
+            `/api/getModelsByMakeAndYear?make=${selectedMake}&year=${selectedYear}`
+          );
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch models');
+          }
+
+          const data = await response.json();
+          setOptionsModels(data.models || []);
+        } catch (err) {
+          console.error('Error fetching models:', err);
+          setError('Failed to load models. Please try again.');
+        }
+      }
+    };
+
+    fetchModels();
+  }, [selectedYear, selectedMake]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -61,20 +82,29 @@ const Selector: React.FC<SelectorProps> = ({
       </Select>
 
       {/* Model Selector */}
-      <Select onValueChange={setSelectedModel}>
+      <Select>
         <SelectTrigger className="w-[300px]">
           <SelectValue placeholder="Select a Model" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {optionsModels.map((model, index) => (
-              <SelectItem key={index} value={model}>
-                {model}
+            {optionsModels.length > 0 ? (
+              optionsModels.map((model, index) => (
+                <SelectItem key={index} value={model}>
+                  {model}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem disabled={true} value={'value'}>
+                No models available for this year and make
               </SelectItem>
-            ))}
+            )}
           </SelectGroup>
         </SelectContent>
       </Select>
+
+      {/* Error Message */}
+      {error && <p className="text-red-500">{error}</p>}
     </div>
   );
 };
