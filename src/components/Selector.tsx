@@ -103,6 +103,18 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
         </SelectContent>
       </Select>
 
+      {/* Engine Selector */}
+      <Select>
+        <SelectTrigger className="w-[300px]">
+          <SelectValue placeholder="Please Select Engine Type" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem key={'item'} value="gg">
+            Hi
+          </SelectItem>
+        </SelectContent>
+      </Select>
+
       {/* Error Message */}
       {error && <p className="text-red-500">{error}</p>}
     </div>
