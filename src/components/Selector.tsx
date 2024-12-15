@@ -13,13 +13,16 @@ import {
 interface SelectorProps {
   optionsYears: string[]; // Array of years
   optionsMakes: string[]; // Array of makes
+  optionsEngines: string[];
 }
 
 const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
   // State for each selection
   const [selectedYear, setSelectedYear] = useState<string>('');
   const [selectedMake, setSelectedMake] = useState<string>('');
+  const [selectedEngines, setSelectedEngines] = useState<string>('');
   const [optionsModels, setOptionsModels] = useState<string[]>([]); // Models dynamically fetched
+  const [optionsEngines, setOptionsEngines] = useState<string[]>([]); // Engines dynamically fetched
   const [error, setError] = useState<string | null>(null);
 
   // Fetch models dynamically based on selected make and year
@@ -31,12 +34,17 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
             `/api/getModelsByMakeAndYear?make=${selectedMake}&year=${selectedYear}`
           );
 
+          const responseEngines = await fetch(
+            `/api/getEnginesByMakeAndYear?make=${selectedMake}&year=${selectedYear}`
+          );
           if (!response.ok) {
             throw new Error('Failed to fetch models');
           }
 
           const data = await response.json();
+          const dataEngine = await responseEngines.json();
           setOptionsModels(data.models || []);
+          setOptionsEngines(dataEngine.engines || []);
         } catch (err) {
           console.error('Error fetching models:', err);
           setError('Failed to load models. Please try again.');
@@ -45,7 +53,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
     };
 
     fetchModels();
-  }, [selectedYear, selectedMake]);
+  }, [selectedYear, selectedMake, selectedEngines]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -109,9 +117,19 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
           <SelectValue placeholder="Please Select Engine Type" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem key={'item'} value="gg">
-            Hi
-          </SelectItem>
+          <SelectGroup>
+            {optionsEngines.length > 0 ? (
+              optionsEngines.map((engines, index) => (
+                <SelectItem key={index} value={engines}>
+                  {engines}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem disabled={true} value={'value'}>
+                No engines found for this make and model
+              </SelectItem>
+            )}
+          </SelectGroup>
         </SelectContent>
       </Select>
 
