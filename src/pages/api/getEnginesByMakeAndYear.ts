@@ -21,14 +21,16 @@ export default async function getModelsByMakeAndYear(
     // Query database for engine displacement  based on `make` and `year`
     const { data, error } = await supabase
       .from('vehicle_table_and_MPG')
-      .select('displ')  //select engine displacement
+      .select('displ') // Select engine displacement
       .eq('make', make) // Match make
-      .eq('year', year) // Match year
+      .eq('year', year); // Match year
 
     if (error) throw error;
 
-    // Extract unique engine displayments
-    const uniqueEngines = [...new Set(data.map((item: any) => item.displ))];
+    // Filter out null or empty values and extract unique engine displacements
+    const uniqueEngines = [
+      ...new Set(data.map((item: any) => item.displ).filter((displ) => displ))
+    ];
 
     return res.status(200).json({ engines: uniqueEngines });
   } catch (err) {

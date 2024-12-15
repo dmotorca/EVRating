@@ -13,7 +13,6 @@ import {
 interface SelectorProps {
   optionsYears: string[]; // Array of years
   optionsMakes: string[]; // Array of makes
-  optionsEngines: string[];
 }
 
 const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {

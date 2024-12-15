@@ -109,7 +109,7 @@ const VehicleSelectorPage = () => {
 
   return (
     <div>
-      <h1>Vehicle Selector</h1>
+      <h1>SELECTOR </h1>
       <Selector optionsYears={years} optionsMakes={makes} />
     </div>
   );
