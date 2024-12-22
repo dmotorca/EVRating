@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import { TrendingUp } from 'lucide-react';
 import {
   Label,
@@ -19,7 +18,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
-import { motion } from 'framer-motion';
+const chartData = [
+  { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
+];
 
 const chartConfig = {
   visitors: {
@@ -32,26 +33,11 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function PieChart() {
-  const [chartData, setChartData] = useState([
-    { browser: 'safari', visitors: 0, fill: 'var(--color-safari)' },
-  ]);
-
-  // Simulate data loading with animation
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setChartData([
-        { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-      ]);
-    }, 1000); // Adjust timing as needed
-
-    return () => clearTimeout(timeout); // Cleanup timeout
-  }, []);
-
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Radial Chart - Animated</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Green Rating</CardTitle>
+        <CardDescription>YEAR MAKE MODEL</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -61,7 +47,7 @@ export function PieChart() {
           <RadialBarChart
             data={chartData}
             startAngle={0}
-            endAngle={250}
+            endAngle={270}
             innerRadius={80}
             outerRadius={110}
           >
@@ -76,7 +62,8 @@ export function PieChart() {
               dataKey="visitors"
               background
               cornerRadius={10}
-              isAnimationActive={true} // Recharts animation
+              isAnimationActive={true} // Enable animation
+              animationDuration={4500} // Duration in milliseconds (4.5 seconds)
             />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label
@@ -89,26 +76,20 @@ export function PieChart() {
                         textAnchor="middle"
                         dominantBaseline="middle"
                       >
-                        <motion.tspan
+                        <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 1 }}
                         >
                           {chartData[0].visitors.toLocaleString()}
-                        </motion.tspan>
-                        <motion.tspan
+                        </tspan>
+                        <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 1, delay: 0.5 }}
                         >
                           Visitors
-                        </motion.tspan>
+                        </tspan>
                       </text>
                     );
                   }
@@ -119,22 +100,12 @@ export function PieChart() {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <motion.div
-          className="flex items-center gap-2 font-medium leading-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
+        <div className="flex items-center gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </motion.div>
-        <motion.div
-          className="leading-none text-muted-foreground"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
+        </div>
+        <div className="leading-none text-muted-foreground">
           Showing total visitors for the last 6 months
-        </motion.div>
+        </div>
       </CardFooter>
     </Card>
   );
