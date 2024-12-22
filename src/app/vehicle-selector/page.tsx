@@ -1,9 +1,6 @@
 import React from 'react';
 import Selector from '@/components/Selector';
 
-import makesData from '../JSON/Makes.json';
-import years from '../JSON/Years.json';
-
 const VehicleSelectorPage = () => {
   const makes = [
     'AM General',
