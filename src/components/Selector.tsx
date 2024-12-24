@@ -19,7 +19,9 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
   // State for each selection
   const [selectedYear, setSelectedYear] = useState<string>('');
   const [selectedMake, setSelectedMake] = useState<string>('');
-  const [selectedEngines, setSelectedEngines] = useState<string>('');
+  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [selectedEngine, setSelectedEngines] = useState<string>('');
+  const [selectedEmissions, setSelectedEmissions] = useState<string>('');
   const [optionsModels, setOptionsModels] = useState<string[]>([]); // Models dynamically fetched
   const [optionsEngines, setOptionsEngines] = useState<string[]>([]); // Engines dynamically fetched
   const [error, setError] = useState<string | null>(null);
@@ -36,14 +38,30 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
           const responseEngines = await fetch(
             `/api/getEnginesByMakeAndYear?make=${selectedMake}&year=${selectedYear}`
           );
+
+          const responseEmissions = await fetch(
+            `/api/getEmissions?make=${selectedMake}&year=${selectedYear}&model=${selectedModel}&engine=${selectedEngine}`
+          );
           if (!response.ok) {
             throw new Error('Failed to fetch models');
           }
 
           const data = await response.json();
           const dataEngine = await responseEngines.json();
+          const dataEmission = await responseEmissions.json();
           setOptionsModels(data.models || []);
           setOptionsEngines(dataEngine.engines || []);
+
+          console.log(
+            'SelectedMake: ',
+            selectedMake,
+            'optionsEngines',
+            optionsEngines,
+            'SelectedYear: ',
+            selectedYear,
+            'SelectedEngine',
+            selectedEngine
+          );
         } catch (err) {
           console.error('Error fetching models:', err);
           setError('Failed to load models. Please try again.');
@@ -52,7 +70,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
     };
 
     fetchModels();
-  }, [selectedYear, selectedMake, selectedEngines]);
+  }, [selectedYear, selectedMake, selectedModel, selectedEngine]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -89,7 +107,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
       </Select>
 
       {/* Model Selector */}
-      <Select>
+      <Select onValueChange={setSelectedModel}>
         <SelectTrigger className="w-[300px]">
           <SelectValue placeholder="Select a Model" />
         </SelectTrigger>
@@ -111,7 +129,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
       </Select>
 
       {/* Engine Selector */}
-      <Select>
+      <Select onValueChange={setSelectedEngines}>
         <SelectTrigger className="w-[300px]">
           <SelectValue placeholder="Please Select Engine Type" />
         </SelectTrigger>
