@@ -105,8 +105,7 @@ const VehicleSelectorPage = () => {
   ];
 
   return (
-    <div>
-      <h1>SELECTOR </h1>
+    <div className="flex flex-col lg:flex-row lg:gap-4">
       <Selector optionsYears={years} optionsMakes={makes} />
     </div>
   );

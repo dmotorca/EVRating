@@ -32,12 +32,21 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PieChart() {
+interface PieChartProps {
+  averageFuel: string;
+}
+
+const averageUSAFuel = 2200;
+
+const PieChart: React.FC<PieChartProps> = ({ averageFuel }) => {
+  const temp = Number(averageFuel);
+  const displayedFuel = (temp / averageUSAFuel) * 100;
+  console.log('MATH | ', displayedFuel);
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Green Rating</CardTitle>
-        <CardDescription>YEAR MAKE MODEL</CardDescription>
+        <CardDescription>{displayedFuel}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -109,4 +118,6 @@ export function PieChart() {
       </CardFooter>
     </Card>
   );
-}
+};
+
+export default PieChart;
