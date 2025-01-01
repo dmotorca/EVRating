@@ -40,13 +40,13 @@ const averageUSAFuel = 2200;
 
 const PieChart: React.FC<PieChartProps> = ({ averageFuel }) => {
   const temp = Number(averageFuel);
-  const displayedFuel = (temp / averageUSAFuel) * 100;
-  console.log('MATH | ', displayedFuel);
+  const displayedFuel = (temp / averageUSAFuel) * 360;
+  console.log('FUEL: | ', displayedFuel);
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Green Rating</CardTitle>
-        <CardDescription>{displayedFuel}</CardDescription>
+        <CardDescription>CAR MAKE YEAR & MODEL</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -56,7 +56,7 @@ const PieChart: React.FC<PieChartProps> = ({ averageFuel }) => {
           <RadialBarChart
             data={chartData}
             startAngle={0}
-            endAngle={270}
+            endAngle={displayedFuel}
             innerRadius={80}
             outerRadius={110}
           >
@@ -72,7 +72,7 @@ const PieChart: React.FC<PieChartProps> = ({ averageFuel }) => {
               background
               cornerRadius={10}
               isAnimationActive={true} // Enable animation
-              animationDuration={4500} // Duration in milliseconds (4.5 seconds)
+              animationDuration={3500} // Duration in milliseconds (3.5 seconds)
             />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label

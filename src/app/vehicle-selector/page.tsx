@@ -48,7 +48,6 @@ const VehicleSelectorPage = () => {
     'Porsche',
     'Ram',
     'Rolls-Royce',
-    'Saab',
     'Saturn',
     'Subaru',
     'Suzuki',
