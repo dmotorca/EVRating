@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
 const geistSans = localFont({
@@ -16,8 +15,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'EV Rating',
-  description: 'EV Rating',
+  title: 'Green Factor',
+  description:
+    'How does your car compare to other vehicles in terms of carbon emissions over time?',
 };
 
 export default function RootLayout({

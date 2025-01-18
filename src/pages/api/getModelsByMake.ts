@@ -10,7 +10,6 @@ export default async function getModelsByMake(req: NextApiRequest, res: NextApiR
   const { make } = req.query;
 
 
-
   if (!make || typeof make !== 'string') {
     return res.status(400).json({ error: 'Missing or invalid make parameter' });
   }
@@ -27,7 +26,8 @@ export default async function getModelsByMake(req: NextApiRequest, res: NextApiR
     // Extract unique models
     const uniqueModels = Array.from(new Set(data.map((item) => item.baseModel)));
     return res.status(200).json({ uniqueModels });
-  } catch (err) {
+  } catch (error) {
     return res.status(500).json({ error: 'Failed to fetch models' });
+    console.log(error)
   }
 }

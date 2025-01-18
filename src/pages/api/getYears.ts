@@ -1,3 +1,4 @@
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -24,8 +25,12 @@ export default async function getYears(req: NextApiRequest, res: NextApiResponse
     if (error) throw error;
 
     // Extract unique models
+    if(data){
+
     return res.status(200).json({ years});
-  } catch (err) {
+    }
+  } catch (error) {
     return res.status(500).json({ error: 'Failed to fetch years' });
+    console.log(error)
   }
 }

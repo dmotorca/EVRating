@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
+//import Link from 'next/link';
 
-import { cn } from '@/lib/utils';
+//import { cn } from '@/lib/utils';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,7 +10,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+  //navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import React from 'react';
 

@@ -1,5 +1,5 @@
-import Selector from '@/components/Selector';
-import Footer from '../components/Footer';
+//import Selector from '@/components/Selector';
+//import Footer from '../components/Footer';
 
 export default function Home() {
   return (

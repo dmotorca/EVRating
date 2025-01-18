@@ -146,8 +146,8 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
       </Select>
       {/* Error Message */}
       {error && <p className="text-red-500">{error}</p>}
-      <PieChart averageFuel={selectedEmissions}></PieChart>
-      <Graph averageFuel={selectedEmissions}></Graph>
+      <PieChart averageFuel={selectedEmissions || '0'}></PieChart>
+      <Graph averageFuel={selectedEmissions || '0'}></Graph>
     </div>
   );
 };

@@ -49,7 +49,7 @@ const Footer = () => {
             width={16}
             height={16}
           />
-          FOOTER→
+          FOOTER
         </a>
       </footer>
     </div>

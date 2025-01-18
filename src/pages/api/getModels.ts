@@ -1,4 +1,3 @@
-//Return all model in database
 
 // src/pages/api/getMakeNames.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
