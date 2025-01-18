@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 
 import PieChart from './PieChart';
+import Graph from './Graph';
 
 interface SelectorProps {
   optionsYears: string[]; // Array of years
@@ -56,7 +57,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
               `/api/getEmissions?make=${selectedMake}&year=${selectedYear}&model=${selectedModel}&engine=${selectedEngine}`
             );
             const dataEmission = await responseEmissions.json();
-            setSelectedEmissions(dataEmission.averageFuelCost08);
+            setSelectedEmissions(dataEmission.averagefuelCost08);
             console.log('EMISSION DATA: ', dataEmission);
           }
         } catch (err) {
@@ -146,6 +147,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
       {/* Error Message */}
       {error && <p className="text-red-500">{error}</p>}
       <PieChart averageFuel={selectedEmissions}></PieChart>
+      <Graph averageFuel={selectedEmissions}></Graph>
     </div>
   );
 };

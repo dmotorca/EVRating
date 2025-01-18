@@ -28,19 +28,18 @@ const chartConfig = {
   },
   safari: {
     label: 'Safari',
-    color: 'hsl(var(--chart-2))',
+    color: 'hsl(var(--chart-1))',
   },
 } satisfies ChartConfig;
 
 interface PieChartProps {
   averageFuel: string;
 }
-
-const averageUSAFuel = 2200;
+const averageUSAFuel = 2600;
 
 const PieChart: React.FC<PieChartProps> = ({ averageFuel }) => {
   const temp = Number(averageFuel);
-  const displayedFuel = (temp / averageUSAFuel) * 360;
+  const displayedFuel = (averageUSAFuel / temp) * 360;
   console.log('FUEL: | ', displayedFuel);
   return (
     <Card className="flex flex-col">
@@ -90,14 +89,14 @@ const PieChart: React.FC<PieChartProps> = ({ averageFuel }) => {
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
                         >
-                          {chartData[0].visitors.toLocaleString()}
+                          {averageFuel}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          C02 Emissions
                         </tspan>
                       </text>
                     );
