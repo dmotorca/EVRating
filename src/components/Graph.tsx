@@ -24,14 +24,13 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 const chartData = [
-  { year: '1', desktop: 186, mobile: 80 },
-  { year: '2', desktop: 186, mobile: 80 },
-  { year: '3', desktop: 186, mobile: 80 },
-  { year: '4', desktop: 186, mobile: 46 },
-  { year: '5', desktop: 286, mobile: 80 },
-  { year: '6', desktop: 386, mobile: 80 },
-  { year: '7', desktop: 186, mobile: 80 },
-  { year: '8', desktop: 186, mobile: 80 },
+  { year: '1', average: 4.6, selected: 80, EV: 80 },
+  { year: '2', average: 9.2, selected: 80, EV: 80 },
+  { year: '3', average: 13.8, selected: 80, EV: 80 },
+  { year: '4', average: 18.4, selected: 80, EV: 80 },
+  { year: '5', average: 23, selected: 80, EV: 80 },
+  { year: '6', average: 27.6, selected: 80, EV: 80 },
+  { year: '7', average: 32.2, selected: 80, EV: 80 },
 ];
 
 const chartConfig = {

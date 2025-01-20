@@ -21,12 +21,12 @@ export default async function getModelsByMakeAndYear(
     // Query database for fuel cost based on `make`, `year`, `model`, and `engine`
     const { data, error } = await supabase
       .from('vehicle_table_and_MPG')
-      .select('fuelCost08') // Select fuel cost
+      .select('co2TailpipeGpm') //Select emissions
       .eq('make', make) // Match make
       .eq('year', year) // Match year
       .eq('baseModel', model) // Match model
-      .eq('displ', engine); // Match engine displacement
-
+      .eq('displ', engine)
+    
     if (error) throw error;
 
     // Ensure `data` exists and is valid
@@ -34,16 +34,20 @@ export default async function getModelsByMakeAndYear(
       return res.status(404).json({ error: 'No data found for the given parameters' });
     }
 
+      console.log("DATAAAA: " ,data)
     // Extract `fuelCost08` values and filter out null/undefined values
-    const fuelCosts = data
-      .map((item: any) => item.fuelCost08)
+    const emissionsPerMile = data
+      .map((item: any) => item.co2TailpipeGpm)
       .filter((value) => value !== null && value !== undefined);
 
     // Calculate the average
-    const total = fuelCosts.reduce((sum, value) => sum + value, 0);
-    const average = total / fuelCosts.length;
+    const total = emissionsPerMile.reduce((sum, value) => sum + value, 0);
+    console.log("TOTAL, ", total)
+    console.log("LENGTH: ", emissionsPerMile.length)
+    const average = total / emissionsPerMile.length;
+    console.log("AVERAGE", average)
     // Return the average and original data
-    return res.status(200).json({ averageFuelCost08: average });
+    return res.status(200).json({co2TailpipeGpm: average });
   } catch (err) {
     console.error('Error fetching models:', err);
     return res.status(500).json({ error: 'Failed to fetch models' });
