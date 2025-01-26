@@ -4,10 +4,8 @@ import { TrendingUp } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 const twoLitersInTon = 500;
-const averageC02Gpm = 400;
 
 console.log(twoLitersInTon);
-console.log(averageC02Gpm);
 
 import {
   Card,
@@ -41,41 +39,93 @@ interface GraphProps {
 }
 
 let co2WithFactor = 0;
+const averageco2 = 400;
+let workingAverage = 0;
 
 const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
   co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
-  const chartData = [
+  workingAverage = averageco2 * parseInt(milesDriven);
+
+  const userOnTopData = [
     {
       year: '1',
       user: co2WithFactor,
-      average: averageC02Gpm * parseInt(milesDriven),
+      average: workingAverage,
     },
     {
       year: '2',
       user: co2WithFactor * 2,
-      average: averageC02Gpm * parseInt(milesDriven) * 2,
+      average: workingAverage * 2,
     },
     {
       year: '3',
       user: co2WithFactor * 3,
-      average: averageC02Gpm * parseInt(milesDriven) * 3,
+      average: workingAverage * 3,
     },
     {
       year: '4',
       user: co2WithFactor * 4,
-      average: averageC02Gpm * parseInt(milesDriven) * 4,
+      average: workingAverage * 4,
     },
     {
       year: '5',
       user: co2WithFactor * 5,
-      average: averageC02Gpm * parseInt(milesDriven) * 5,
+      average: workingAverage * 5,
     },
     {
       year: '6',
       user: co2WithFactor * 6,
-      average: averageC02Gpm * parseInt(milesDriven) * 6,
+      average: workingAverage * 6,
+    },
+    {
+      year: '7',
+      user: co2WithFactor * 7,
+      average: workingAverage * 7,
     },
   ];
+
+  const workingOnTopData = [
+    {
+      year: '1',
+      average: workingAverage,
+
+      user: co2WithFactor,
+    },
+    {
+      year: '2',
+      user: co2WithFactor * 2,
+      average: workingAverage * 2,
+    },
+    {
+      year: '3',
+      user: co2WithFactor * 3,
+      average: workingAverage * 3,
+    },
+    {
+      year: '4',
+      user: co2WithFactor * 4,
+      average: workingAverage * 4,
+    },
+    {
+      year: '5',
+      user: co2WithFactor * 5,
+      average: workingAverage * 5,
+    },
+    {
+      year: '6',
+      user: co2WithFactor * 6,
+      average: workingAverage * 6,
+    },
+    {
+      year: '7',
+      user: co2WithFactor * 7,
+      average: workingAverage * 7,
+    },
+  ];
+
+  const selectedData =
+    co2WithFactor > workingAverage ? userOnTopData : workingOnTopData;
+
   return (
     <Card>
       <CardHeader>
@@ -88,18 +138,18 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={selectedData}
             margin={{
-              left: 4,
-              right: 4,
+              left: 2,
+              right: 2,
             }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid vertical={true} />
             <XAxis
               dataKey="year"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={2}
               tickFormatter={(value) => `Year ${value}`}
             />
             <ChartTooltip
@@ -110,9 +160,9 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
                   indicator="dot"
                 />
               }
-            />{' '}
+            />
             <defs>
-              <linearGradient id="fillaverage" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillAverage" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
                   stopColor="var(--color-average)"
@@ -124,7 +174,7 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id="filluser" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillUser" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
                   stopColor="var(--color-user)"
@@ -140,7 +190,7 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
             <Area
               dataKey="user"
               type="natural"
-              fill="url(#filluserr)"
+              fill="url(#fillUser)"
               fillOpacity={0.4}
               stroke="var(--color-user)"
               stackId="a"
@@ -148,7 +198,7 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
             <Area
               dataKey="average"
               type="natural"
-              fill="url(#fillaverage)"
+              fill="url(#fillAverage)"
               fillOpacity={0.4}
               stroke="var(--color-average)"
               stackId="a"
