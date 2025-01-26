@@ -9,8 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-import PieChart from './PieChart';
+import { Input } from '@/components/ui/input';
 import Graph from './Graph';
 
 interface SelectorProps {
@@ -19,14 +18,12 @@ interface SelectorProps {
 }
 
 const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
-  // State for each selection
   const [selectedYear, setSelectedYear] = useState<string>('');
   const [selectedMake, setSelectedMake] = useState<string>('');
   const [selectedModel, setSelectedModel] = useState<string>('');
-  const [selectedEngine, setSelectedEngines] = useState<string>('');
   const [selectedEmissions, setSelectedEmissions] = useState<string>('');
+  const [miles, setMiles] = useState<string>(''); // New state for miles driven
   const [optionsModels, setOptionsModels] = useState<string[]>([]); // Models dynamically fetched
-  const [optionsEngines, setOptionsEngines] = useState<string[]>([]); // Engines dynamically fetched
   const [error, setError] = useState<string | null>(null);
 
   // Fetch models dynamically based on selected make and year
@@ -38,28 +35,12 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
             `/api/getModelsByMakeAndYear?make=${selectedMake}&year=${selectedYear}`
           );
 
-          const responseEngines = await fetch(
-            `/api/getEnginesByMakeAndYear?make=${selectedMake}&year=${selectedYear}`
-          );
-
           if (!response.ok) {
             throw new Error('Failed to fetch models');
           }
 
           const data = await response.json();
-          const dataEngine = await responseEngines.json();
           setOptionsModels(data.models || []);
-
-          setOptionsEngines(dataEngine.engines || []);
-
-          if (selectedModel && selectedMake && selectedEngine) {
-            const responseEmissions = await fetch(
-              `/api/getEmissions?make=${selectedMake}&year=${selectedYear}&model=${selectedModel}&engine=${selectedEngine}`
-            );
-            const dataEmission = await responseEmissions.json();
-            setSelectedEmissions(dataEmission.averagefuelCost08);
-            console.log('EMISSION DATA: ', dataEmission);
-          }
         } catch (err) {
           console.error('Error fetching models:', err);
           setError('Failed to load models. Please try again.');
@@ -68,7 +49,32 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
     };
 
     fetchModels();
-  }, [selectedYear, selectedMake, selectedEngine]);
+  }, [selectedYear, selectedMake]);
+
+  // Fetch emissions dynamically based on selected make, year, and model
+  useEffect(() => {
+    const fetchEmissions = async () => {
+      if (selectedYear && selectedMake && selectedModel) {
+        try {
+          const response = await fetch(
+            `/api/getEmissions?make=${selectedMake}&year=${selectedYear}&model=${selectedModel}`
+          );
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch emissions');
+          }
+
+          const dataEmission = await response.json();
+          setSelectedEmissions(dataEmission.co2TailpipeGpm);
+        } catch (err) {
+          console.error('Error fetching emissions:', err);
+          setError('Failed to load emissions. Please try again.');
+        }
+      }
+    };
+
+    fetchEmissions();
+  }, [selectedYear, selectedMake, selectedModel]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -87,6 +93,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
           </SelectGroup>
         </SelectContent>
       </Select>
+
       {/* Make Selector */}
       <Select onValueChange={setSelectedMake}>
         <SelectTrigger className="w-[300px]">
@@ -102,6 +109,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
           </SelectGroup>
         </SelectContent>
       </Select>
+
       {/* Model Selector */}
       <Select onValueChange={setSelectedModel}>
         <SelectTrigger className="w-[300px]">
@@ -123,30 +131,30 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
           </SelectGroup>
         </SelectContent>
       </Select>
-      {/* Engine Selector */}
-      <Select onValueChange={setSelectedEngines}>
-        <SelectTrigger className="w-[300px]">
-          <SelectValue placeholder="Please Select Engine Type" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {optionsEngines.length > 0 ? (
-              optionsEngines.map((engines, index) => (
-                <SelectItem key={index} value={engines}>
-                  {engines}
-                </SelectItem>
-              ))
-            ) : (
-              <SelectItem disabled={true} value={'value'}>
-                No engines found for this make and model
-              </SelectItem>
-            )}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+
+      {/* Miles Driven */}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="miles-driven" className="text-sm font-medium">
+          Annual Miles Driven
+        </label>
+        <Input
+          id="miles-driven"
+          type="number"
+          placeholder="Enter miles driven per year"
+          className="w-[300px]"
+          value={miles}
+          onChange={(e) => setMiles(e.target.value)}
+        />
+      </div>
+
       {/* Error Message */}
       {error && <p className="text-red-500">{error}</p>}
-      <Graph averageFuel={selectedEmissions || '0'}></Graph>
+
+      {/* Pass both emissions and miles to Graph */}
+      <Graph
+        personalco2={selectedEmissions || '0'}
+        milesDriven={miles || '0'}
+      />
     </div>
   );
 };

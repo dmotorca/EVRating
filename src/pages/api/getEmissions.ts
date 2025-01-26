@@ -9,7 +9,7 @@ export default async function getModelsByMakeAndYear(
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { make, year, model, engine } = req.query;
+  const { make, year, model} = req.query;
 
   if (!make || typeof make !== 'string' || !year || typeof year !== 'string') {
     return res
@@ -25,7 +25,6 @@ export default async function getModelsByMakeAndYear(
       .eq('make', make) // Match make
       .eq('year', year) // Match year
       .eq('baseModel', model) // Match model
-      .eq('displ', engine)
     
     if (error) throw error;
 
@@ -34,19 +33,19 @@ export default async function getModelsByMakeAndYear(
       return res.status(404).json({ error: 'No data found for the given parameters' });
     }
 
-      console.log("DATAAAA: " ,data)
-    // Extract `fuelCost08` values and filter out null/undefined values
-    const emissionsPerMile = data
-      .map((item: any) => item.co2TailpipeGpm)
-      .filter((value) => value !== null && value !== undefined);
+    //Grabbing length
+    const length = data.length
 
-    // Calculate the average
-    const total = emissionsPerMile.reduce((sum, value) => sum + value, 0);
-    console.log("TOTAL, ", total)
-    console.log("LENGTH: ", emissionsPerMile.length)
-    const average = total / emissionsPerMile.length;
-    console.log("AVERAGE", average)
-    // Return the average and original data
+    // Calculate the total
+    const total = data
+    .map((item) => parseFloat(item.co2TailpipeGpm))
+    .reduce((acc, value) => acc + value, 0);
+
+    const average = (total / length) ; //Finding the average
+    average.toFixed(2) //triming the number to make it easier
+
+    //Math for miles driven
+
     return res.status(200).json({co2TailpipeGpm: average });
   } catch (err) {
     console.error('Error fetching models:', err);

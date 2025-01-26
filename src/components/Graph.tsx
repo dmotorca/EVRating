@@ -4,10 +4,7 @@ import { TrendingUp } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 const twoLitersInTon = 500;
-const averageC02Tons = 4.6;
-
-console.log(twoLitersInTon);
-console.log(averageC02Tons);
+const averageC02Gpm = 400;
 
 import {
   Card,
@@ -24,13 +21,13 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 const chartData = [
-  { year: '1', average: 4.6, selected: 80, EV: 80 },
-  { year: '2', average: 9.2, selected: 80, EV: 80 },
-  { year: '3', average: 13.8, selected: 80, EV: 80 },
-  { year: '4', average: 18.4, selected: 80, EV: 80 },
-  { year: '5', average: 23, selected: 80, EV: 80 },
-  { year: '6', average: 27.6, selected: 80, EV: 80 },
-  { year: '7', average: 32.2, selected: 80, EV: 80 },
+  { year: '1', average: 4.6, selected: {}, EV: 80 },
+  { year: '2', average: 9.2, selected: {}, EV: 80 },
+  { year: '3', average: 13.8, selected: {}, EV: 80 },
+  { year: '4', average: 18.4, selected: {}, EV: 80 },
+  { year: '5', average: 23, selected: {}, EV: 80 },
+  { year: '6', average: 27.6, selected: {}, EV: 80 },
+  { year: '7', average: 32.2, selected: {}, EV: 80 },
 ];
 
 const chartConfig = {
@@ -45,10 +42,14 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface GraphProps {
-  averageFuel: string;
+  personalco2: string;
+  milesDriven: string;
 }
 
-const Graph: React.FC<GraphProps> = ({ averageFuel }) => {
+let co2WithFactor = 0;
+
+const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
+  co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
   return (
     <Card>
       <CardHeader>
@@ -125,7 +126,7 @@ const Graph: React.FC<GraphProps> = ({ averageFuel }) => {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month {averageFuel}{' '}
+              Trending up by {milesDriven} this month {co2WithFactor}{' '}
               <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
