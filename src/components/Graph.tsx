@@ -23,23 +23,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-const chartData = [
-  { year: '1', average: 4.6, selected: {}, EV: 80 },
-  { year: '2', average: 9.2, selected: {}, EV: 80 },
-  { year: '3', average: 13.8, selected: {}, EV: 80 },
-  { year: '4', average: 18.4, selected: {}, EV: 80 },
-  { year: '5', average: 23, selected: {}, EV: 80 },
-  { year: '6', average: 27.6, selected: {}, EV: 80 },
-  { year: '7', average: 32.2, selected: {}, EV: 80 },
-];
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  user: {
+    label: 'User',
     color: 'hsl(var(--chart-1))',
   },
-  mobile: {
-    label: 'Mobile',
+  average: {
+    label: 'Average',
     color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig;
@@ -53,6 +44,38 @@ let co2WithFactor = 0;
 
 const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
   co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
+  const chartData = [
+    {
+      year: '1',
+      user: co2WithFactor,
+      average: averageC02Gpm * parseInt(milesDriven),
+    },
+    {
+      year: '2',
+      user: co2WithFactor * 2,
+      average: averageC02Gpm * parseInt(milesDriven) * 2,
+    },
+    {
+      year: '3',
+      user: co2WithFactor * 3,
+      average: averageC02Gpm * parseInt(milesDriven) * 3,
+    },
+    {
+      year: '4',
+      user: co2WithFactor * 4,
+      average: averageC02Gpm * parseInt(milesDriven) * 4,
+    },
+    {
+      year: '5',
+      user: co2WithFactor * 5,
+      average: averageC02Gpm * parseInt(milesDriven) * 5,
+    },
+    {
+      year: '6',
+      user: co2WithFactor * 6,
+      average: averageC02Gpm * parseInt(milesDriven) * 6,
+    },
+  ];
   return (
     <Card>
       <CardHeader>
@@ -77,49 +100,57 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => `Year ${value}`}
             />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) => `Year ${value}`}
+                  indicator="dot"
+                />
+              }
+            />{' '}
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillaverage" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-desktop)"
+                  stopColor="var(--color-average)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-desktop)"
+                  stopColor="var(--color-average)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="filluser" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-user)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-user)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
             <Area
-              dataKey="mobile"
+              dataKey="user"
               type="natural"
-              fill="url(#fillMobile)"
+              fill="url(#filluserr)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke="var(--color-user)"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="average"
               type="natural"
-              fill="url(#fillDesktop)"
+              fill="url(#fillaverage)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="var(--color-average)"
               stackId="a"
             />
           </AreaChart>
