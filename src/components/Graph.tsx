@@ -6,6 +6,9 @@ import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 const twoLitersInTon = 500;
 const averageC02Gpm = 400;
 
+console.log(twoLitersInTon);
+console.log(averageC02Gpm);
+
 import {
   Card,
   CardContent,
