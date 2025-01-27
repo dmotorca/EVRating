@@ -6,11 +6,14 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+
 import { Input } from '@/components/ui/input';
 import Graph from './Graph';
+import { Label } from './ui/label';
 
 interface SelectorProps {
   optionsYears: string[]; // Array of years
@@ -77,9 +80,11 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
   }, [selectedYear, selectedMake, selectedModel]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 mx-2.5 pt-5">
       {/* Year Selector */}
+
       <Select onValueChange={setSelectedYear}>
+        <Label className="font-semibold">Vehicle Year</Label>
         <SelectTrigger className="w-[300px]">
           <SelectValue placeholder="Select a Year" />
         </SelectTrigger>
@@ -96,6 +101,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
 
       {/* Make Selector */}
       <Select onValueChange={setSelectedMake}>
+        <Label className="font-semibold">Vehicle Make</Label>
         <SelectTrigger className="w-[300px]">
           <SelectValue placeholder="Select a Make" />
         </SelectTrigger>
@@ -112,6 +118,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
 
       {/* Model Selector */}
       <Select onValueChange={setSelectedModel}>
+        <Label className="font-semibold">Vehicle Model</Label>
         <SelectTrigger className="w-[300px]">
           <SelectValue placeholder="Select a Model" />
         </SelectTrigger>

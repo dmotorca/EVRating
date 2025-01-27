@@ -140,17 +140,17 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
             accessibilityLayer
             data={selectedData}
             margin={{
-              left: 2,
-              right: 2,
+              left: 4,
+              right: 0,
             }}
           >
-            <CartesianGrid vertical={true} />
+            <CartesianGrid vertical={false} />
             <XAxis
               dataKey="year"
               tickLine={false}
               axisLine={false}
-              tickMargin={2}
-              tickFormatter={(value) => `Year ${value}`}
+              tickMargin={8}
+              tickFormatter={(value) => `${value}`}
             />
             <ChartTooltip
               cursor={false}
