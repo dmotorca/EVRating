@@ -88,38 +88,37 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
     {
       year: '1',
       average: workingAverage,
-
       user: co2WithFactor,
     },
     {
       year: '2',
-      user: co2WithFactor * 2,
       average: workingAverage * 2,
+      user: co2WithFactor * 2,
     },
     {
       year: '3',
-      user: co2WithFactor * 3,
       average: workingAverage * 3,
+      user: co2WithFactor * 3,
     },
     {
       year: '4',
-      user: co2WithFactor * 4,
       average: workingAverage * 4,
+      user: co2WithFactor * 4,
     },
     {
       year: '5',
-      user: co2WithFactor * 5,
       average: workingAverage * 5,
+      user: co2WithFactor * 5,
     },
     {
       year: '6',
-      user: co2WithFactor * 6,
       average: workingAverage * 6,
+      user: co2WithFactor * 6,
     },
     {
       year: '7',
-      user: co2WithFactor * 7,
       average: workingAverage * 7,
+      user: co2WithFactor * 7,
     },
   ];
 
