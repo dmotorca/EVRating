@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { TrendingUp } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
@@ -22,7 +23,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 
-const chartConfig = {
+const chartConfig1 = {
   user: {
     label: 'User',
     color: 'hsl(var(--chart-1))',
@@ -33,20 +34,53 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const chartConfig2 = {
+  average: {
+    label: 'Average',
+    color: 'hsl(var(--chart-2))',
+  },
+  user: {
+    label: 'User',
+    color: 'hsl(var(--chart-1))',
+  },
+} satisfies ChartConfig;
+
 interface GraphProps {
   personalco2: string;
   milesDriven: string;
 }
 
-let co2WithFactor = 0;
+let co2WithFactor = 1;
 const averageco2 = 400;
 let workingAverage = 0;
 
 const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
   co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
   workingAverage = averageco2 * parseInt(milesDriven);
+  console.log(
+    'User Vehicle produces: ',
+    co2WithFactor,
+    'Co2 emissions per mile'
+  );
 
-  const userOnTopData = [
+  const chartConfig = {
+    user: {
+      label: 'Average',
+      color:
+        co2WithFactor > workingAverage
+          ? 'hsl(var(--chart-4))'
+          : 'hsl(var(--chart-1))',
+    },
+    average: {
+      label: 'User ',
+      color:
+        co2WithFactor > workingAverage
+          ? 'hsl(var(--chart-1))'
+          : 'hsl(var(--chart-3))',
+    },
+  } satisfies ChartConfig;
+
+  const chartData = [
     {
       year: '1',
       user: co2WithFactor,
@@ -83,47 +117,6 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
       average: workingAverage * 7,
     },
   ];
-
-  const workingOnTopData = [
-    {
-      year: '1',
-      average: workingAverage,
-      user: co2WithFactor,
-    },
-    {
-      year: '2',
-      average: workingAverage * 2,
-      user: co2WithFactor * 2,
-    },
-    {
-      year: '3',
-      average: workingAverage * 3,
-      user: co2WithFactor * 3,
-    },
-    {
-      year: '4',
-      average: workingAverage * 4,
-      user: co2WithFactor * 4,
-    },
-    {
-      year: '5',
-      average: workingAverage * 5,
-      user: co2WithFactor * 5,
-    },
-    {
-      year: '6',
-      average: workingAverage * 6,
-      user: co2WithFactor * 6,
-    },
-    {
-      year: '7',
-      average: workingAverage * 7,
-      user: co2WithFactor * 7,
-    },
-  ];
-
-  const selectedData =
-    co2WithFactor > workingAverage ? userOnTopData : workingOnTopData;
 
   return (
     <Card>
@@ -135,81 +128,153 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
-            data={selectedData}
-            margin={{
-              left: 4,
-              right: 0,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="year"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => `${value}`}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) => `Year ${value}`}
-                  indicator="dot"
-                />
-              }
-            />
-            <defs>
-              <linearGradient id="fillAverage" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-average)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-average)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillUser" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-user)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-user)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-            </defs>
-            <Area
-              dataKey="user"
-              type="natural"
-              fill="url(#fillUser)"
-              fillOpacity={0.4}
-              stroke="var(--color-user)"
-              stackId="a"
-            />
-            <Area
-              dataKey="average"
-              type="natural"
-              fill="url(#fillAverage)"
-              fillOpacity={0.4}
-              stroke="var(--color-average)"
-              stackId="a"
-            />
-          </AreaChart>
+          {co2WithFactor < workingAverage ? (
+            <AreaChart
+              accessibilityLayer
+              data={chartData}
+              margin={{
+                left: 4,
+                right: 0,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="year"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickFormatter={(value) => `${value}`}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) => `Year ${value}`}
+                    indicator="dot"
+                  />
+                }
+              />
+              <defs>
+                <linearGradient id="fillUser" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-user)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-user)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+                <linearGradient id="fillAverage" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-average)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-average)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+              </defs>
+              <Area
+                dataKey="user"
+                type="natural"
+                fill="url(#fillUser)"
+                fillOpacity={0.4}
+                stroke="var(--color-user)"
+                stackId="a"
+              />
+              <Area
+                dataKey="average"
+                type="natural"
+                fill="url(#fillAverage)"
+                fillOpacity={0.4}
+                stroke="var(--color-average)"
+                stackId="a"
+              />
+            </AreaChart>
+          ) : (
+            <AreaChart
+              accessibilityLayer
+              data={chartData}
+              margin={{
+                left: 4,
+                right: 0,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="year"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickFormatter={(value) => `${value}`}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) => ` Year ${value}`}
+                    indicator="dot"
+                  />
+                }
+              />
+              <defs>
+                <linearGradient id="fillAverage" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-average)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-average)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+
+                <linearGradient id="fillUser" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-user)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-user)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+              </defs>
+              <Area
+                dataKey="average"
+                type="natural"
+                fill="url(#fillAverage)"
+                fillOpacity={0.4}
+                stroke="var(--color-average)"
+                stackId="a"
+              />
+              <Area
+                dataKey="user"
+                type="natural"
+                fill="url(#fillUser)"
+                fillOpacity={0.4}
+                stroke="var(--color-user)"
+                stackId="a"
+              />
+            </AreaChart>
+          )}
         </ChartContainer>
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by {milesDriven} this month {co2WithFactor}{' '}
+              Trending up by {milesDriven} this month {co2WithFactor}
               <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
