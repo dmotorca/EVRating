@@ -79,15 +79,14 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
   }, [selectedYear, selectedMake, selectedModel]);
 
   return (
-    <div className="flex flex-col gap-4 mx-2.5 pt-5">
+    <div className="flex flex-col gap-4 mx-2.5 pt-5 ">
       {/* Year Selector */}
-
       <Select onValueChange={setSelectedYear}>
-        <Label className="font-semibold">Vehicle Year</Label>
-        <SelectTrigger className="w-[300px]">
+        <Label className="font-semibold lg:text-lg">Vehicle Year</Label>
+        <SelectTrigger className=" sm:w-max lg:w-[700px] lg:text-lg">
           <SelectValue placeholder="Select a Year" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="lg:text-lg h-56">
           <SelectGroup>
             {optionsYears.map((year, index) => (
               <SelectItem key={index} value={year}>
@@ -100,11 +99,11 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
 
       {/* Make Selector */}
       <Select onValueChange={setSelectedMake}>
-        <Label className="font-semibold">Vehicle Make</Label>
-        <SelectTrigger className="w-[300px]">
+        <Label className="font-semibold lg:text-lg">Vehicle Make</Label>
+        <SelectTrigger className=" sm:w-max lg:w-[700px] lg:text-lg">
           <SelectValue placeholder="Select a Make" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="lg:text-lg h-56">
           <SelectGroup>
             {optionsMakes.map((make, index) => (
               <SelectItem key={index} value={make}>
@@ -117,11 +116,11 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
 
       {/* Model Selector */}
       <Select onValueChange={setSelectedModel}>
-        <Label className="font-semibold">Vehicle Model</Label>
-        <SelectTrigger className="w-[300px]">
+        <Label className="font-semibold lg:text-lg">Vehicle Model</Label>
+        <SelectTrigger className=" sm:w-max lg:w-[700px] lg:text-lg">
           <SelectValue placeholder="Select a Model" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="lg:text-lg h-56">
           <SelectGroup>
             {optionsModels.length > 0 ? (
               optionsModels.map((model, index) => (
@@ -140,14 +139,14 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
 
       {/* Miles Driven */}
       <div className="flex flex-col gap-2">
-        <label htmlFor="miles-driven" className="text-sm font-medium">
+        <label htmlFor="miles-driven" className="text-sm font-semibold">
           Annual Miles Driven
         </label>
         <Input
           id="miles-driven"
           type="number"
-          placeholder="Enter miles driven per year"
-          className="w-[300px]"
+          placeholder="Enter estimated miles driven per year"
+          className="sm:w-[350px]lg:[w-550px]"
           value={miles}
           onChange={(e) => setMiles(e.target.value)}
         />
