@@ -1,7 +1,7 @@
 'use client';
 
 import { TrendingUp } from 'lucide-react';
-import { Bar, BarChart, YAxis, XAxis, LabelList } from 'recharts';
+import { Bar, BarChart, YAxis, XAxis } from 'recharts';
 
 import {
   Card,
@@ -26,6 +26,7 @@ interface PieChartProps {
 const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
   const co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
   const workingAverage = 400 * parseInt(milesDriven);
+  console.log(workingAverage);
 
   console.log(
     'User Vehicle produces: ',
