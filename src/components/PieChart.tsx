@@ -1,13 +1,7 @@
 'use client';
 
 import { TrendingUp } from 'lucide-react';
-import {
-  Label,
-  PolarGrid,
-  PolarRadiusAxis,
-  RadialBar,
-  RadialBarChart,
-} from 'recharts';
+import { Bar, BarChart, YAxis, XAxis, LabelList } from 'recharts';
 
 import {
   Card,
@@ -17,98 +11,88 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ChartConfig, ChartContainer } from '@/components/ui/chart';
-const chartData = [
-  { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-];
-
-const chartConfig = {
-  visitors: {
-    label: 'Visitors',
-  },
-  safari: {
-    label: 'Safari',
-    color: 'hsl(var(--chart-1))',
-  },
-} satisfies ChartConfig;
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
 
 interface PieChartProps {
-  averageFuel: string;
+  personalco2: string;
+  milesDriven: string;
 }
-const averageUSAFuel = 2600;
 
-const PieChart: React.FC<PieChartProps> = ({ averageFuel }) => {
-  const temp = Number(averageFuel);
-  const displayedFuel = (averageUSAFuel / temp) * 360;
-  console.log('FUEL: | ', displayedFuel);
+const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
+  const co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
+  const workingAverage = 400 * parseInt(milesDriven);
+
+  console.log(
+    'User Vehicle produces: ',
+    co2WithFactor,
+    'Co2 emissions per mile'
+  );
+
+  const chartData = [
+    { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
+  ];
+
+  const chartConfig = {
+    chrome: {
+      label: 'Chrome',
+      color: 'hsl(var(--chart-1))',
+    },
+    user: {
+      label: 'User',
+      color: 'hsl(var(--chart-1))',
+    },
+    average: {
+      label: 'Average',
+      color: 'hsl(var(--chart-2))',
+    },
+    ev: {
+      label: 'EV',
+      color: 'hsl(var(--chart-3))',
+    },
+  } satisfies ChartConfig;
+
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>Green Rating</CardTitle>
-        <CardDescription>CAR MAKE YEAR & MODEL</CardDescription>
+    <Card>
+      <CardHeader>
+        <CardTitle>Bar Chart - Mixed</CardTitle>
+        <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <RadialBarChart
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <BarChart
+            accessibilityLayer
             data={chartData}
-            startAngle={0}
-            endAngle={displayedFuel}
-            innerRadius={80}
-            outerRadius={110}
+            layout="vertical"
+            margin={{
+              left: 0,
+            }}
           >
-            <PolarGrid
-              gridType="circle"
-              radialLines={false}
-              stroke="none"
-              className="first:fill-muted last:fill-background"
-              polarRadius={[86, 74]}
+            <YAxis
+              dataKey="browser"
+              type="category"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) =>
+                chartConfig[value as keyof typeof chartConfig]?.label
+              }
             />
-            <RadialBar
-              dataKey="visitors"
-              background
-              cornerRadius={10}
-              isAnimationActive={true} // Enable animation
-              animationDuration={3500} // Duration in milliseconds (3.5 seconds)
+            <XAxis dataKey="visitors" type="number" hide />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
             />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-4xl font-bold"
-                        >
-                          {averageFuel}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          C02 Emissions
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </PolarRadiusAxis>
-          </RadialBarChart>
+            <Bar dataKey="visitors" layout="vertical" radius={5} />
+          </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="flex gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">

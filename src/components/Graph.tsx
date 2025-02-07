@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { TrendingUp } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 const twoLitersInTon = 500;
@@ -23,28 +22,6 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 
-const chartConfig1 = {
-  user: {
-    label: 'User',
-    color: 'hsl(var(--chart-1))',
-  },
-  average: {
-    label: 'Average',
-    color: 'hsl(var(--chart-2))',
-  },
-} satisfies ChartConfig;
-
-const chartConfig2 = {
-  average: {
-    label: 'Average',
-    color: 'hsl(var(--chart-2))',
-  },
-  user: {
-    label: 'User',
-    color: 'hsl(var(--chart-1))',
-  },
-} satisfies ChartConfig;
-
 interface GraphProps {
   personalco2: string;
   milesDriven: string;
@@ -57,26 +34,15 @@ let workingAverage = 0;
 const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
   co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
   workingAverage = averageco2 * parseInt(milesDriven);
-  console.log(
-    'User Vehicle produces: ',
-    co2WithFactor,
-    'Co2 emissions per mile'
-  );
 
   const chartConfig = {
-    average: {
-      label: 'Average ',
-      color:
-        co2WithFactor > workingAverage
-          ? 'hsl(var(--chart-1))'
-          : 'hsl(var(--chart-3))',
-    },
     user: {
       label: 'User',
-      color:
-        co2WithFactor > workingAverage
-          ? 'hsl(var(--chart-4))'
-          : 'hsl(var(--chart-1))',
+      color: co2WithFactor > workingAverage ? 'orange' : 'hsl(var(--chart-1))',
+    },
+    average: {
+      label: 'Average',
+      color: co2WithFactor > workingAverage ? 'hsl(var(--chart-1))' : 'orange',
     },
   } satisfies ChartConfig;
 
@@ -155,18 +121,6 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
                 }
               />
               <defs>
-                <linearGradient id="fillAverage" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-average)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-average)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
                 <linearGradient id="fillUser" x1="0" y1="0" x2="0" y2="1">
                   <stop
                     offset="5%"
@@ -179,21 +133,33 @@ const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
                     stopOpacity={0.1}
                   />
                 </linearGradient>
+                <linearGradient id="fillAverage" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-average)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-average)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
               </defs>
               <Area
                 dataKey="average"
                 type="natural"
-                fill="url(#fillUse)"
+                fill="url(#fillAverage)"
                 fillOpacity={0.4}
-                stroke="var(--color-average)"
+                stroke="var(--color-user)"
                 stackId="a"
               />
               <Area
                 dataKey="user"
                 type="natural"
-                fill="url(#fillAverage)"
+                fill="url(#fillUser)"
                 fillOpacity={0.4}
-                stroke="var(--color-user)"
+                stroke="var(--color-average)"
                 stackId="a"
               />
             </AreaChart>

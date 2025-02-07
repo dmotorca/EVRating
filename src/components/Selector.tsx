@@ -13,6 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import Graph from './Graph';
 import { Label } from './ui/label';
+import PieChart from './PieChart';
 
 interface SelectorProps {
   optionsYears: string[]; // Array of years
@@ -157,6 +158,10 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
 
       {/* Pass both emissions and miles to Graph */}
       <Graph
+        personalco2={selectedEmissions || '0'}
+        milesDriven={miles || '0'}
+      />
+      <PieChart
         personalco2={selectedEmissions || '0'}
         milesDriven={miles || '0'}
       />
