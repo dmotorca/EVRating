@@ -26,6 +26,7 @@ interface PieChartProps {
 const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
   const co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
   const workingAverage = 400 * parseInt(milesDriven);
+  const evEmissions = 1224699;
   console.log(workingAverage);
 
   console.log(
@@ -35,33 +36,43 @@ const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
   );
 
   const chartData = [
-    { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
+    {
+      browser: 'user',
+      emissions: co2WithFactor * 7,
+      fill: 'var(--color-user)',
+    },
+    {
+      browser: 'ev',
+      emissions: evEmissions * 7,
+      fill: 'var(--color-ev)',
+    },
+    {
+      browser: 'average',
+      emissions: workingAverage * 7,
+      fill: 'var(--color-average)',
+    },
   ];
 
   const chartConfig = {
-    chrome: {
-      label: 'Chrome',
-      color: 'hsl(var(--chart-1))',
-    },
     user: {
-      label: 'User',
+      label: 'Selected Vehicle',
       color: 'hsl(var(--chart-1))',
     },
     average: {
-      label: 'Average',
-      color: 'hsl(var(--chart-2))',
+      label: 'Average Vehicle',
+      color: 'hsl(var(--chart-3))',
     },
     ev: {
-      label: 'EV',
-      color: 'hsl(var(--chart-3))',
+      label: 'EV Vehicle',
+      color: 'hsl(var(--chart-2))',
     },
   } satisfies ChartConfig;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Mixed</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>CO2 Vehicle Emissions</CardTitle>
+        <CardDescription>Year 1 through Year 7</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -70,25 +81,25 @@ const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
             data={chartData}
             layout="vertical"
             margin={{
-              left: 0,
+              left: 6,
             }}
           >
             <YAxis
               dataKey="browser"
               type="category"
               tickLine={false}
-              tickMargin={10}
+              tickMargin={0}
               axisLine={false}
               tickFormatter={(value) =>
                 chartConfig[value as keyof typeof chartConfig]?.label
               }
             />
-            <XAxis dataKey="visitors" type="number" hide />
+            <XAxis dataKey="emissions" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="visitors" layout="vertical" radius={5} />
+            <Bar dataKey="emissions" layout="vertical" radius={15} />
           </BarChart>
         </ChartContainer>
       </CardContent>

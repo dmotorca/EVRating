@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/select';
 
 import { Input } from '@/components/ui/input';
-import Graph from './Graph';
 import { Label } from './ui/label';
 import PieChart from './PieChart';
 
@@ -140,14 +139,14 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
 
       {/* Miles Driven */}
       <div className="flex flex-col gap-2">
-        <label htmlFor="miles-driven" className="text-sm font-semibold">
+        <label htmlFor="miles-driven" className="text-lg font-semibold">
           Annual Miles Driven
         </label>
         <Input
           id="miles-driven"
           type="number"
           placeholder="Enter estimated miles driven per year"
-          className="sm:w-[350px]lg:[w-550px]"
+          className="sm:w-[350px]lg:[w-550px] font=lg"
           value={miles}
           onChange={(e) => setMiles(e.target.value)}
         />
@@ -156,11 +155,6 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
       {/* Error Message */}
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* Pass both emissions and miles to Graph */}
-      <Graph
-        personalco2={selectedEmissions || '0'}
-        milesDriven={miles || '0'}
-      />
       <PieChart
         personalco2={selectedEmissions || '0'}
         milesDriven={miles || '0'}
