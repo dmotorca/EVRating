@@ -72,7 +72,7 @@ const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
     <Card>
       <CardHeader>
         <CardTitle>CO2 Vehicle Emissions</CardTitle>
-        <CardDescription>Year 1 through Year 7</CardDescription>
+        <CardDescription>Emissions over a 7 year time period</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

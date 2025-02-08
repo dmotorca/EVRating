@@ -146,7 +146,7 @@ const Selector: React.FC<SelectorProps> = ({ optionsYears, optionsMakes }) => {
           id="miles-driven"
           type="number"
           placeholder="Enter estimated miles driven per year"
-          className="sm:w-[350px]lg:[w-550px] font=lg"
+          className="sm:w-[350px]lg:[w-550px] lg:text-lg"
           value={miles}
           onChange={(e) => setMiles(e.target.value)}
         />
