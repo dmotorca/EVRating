@@ -34,7 +34,6 @@ let workingAverage = 0;
 const Graph: React.FC<GraphProps> = ({ personalco2, milesDriven }) => {
   co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
   workingAverage = averageco2 * parseInt(milesDriven);
-
   const chartConfig = {
     user: {
       label: 'User',

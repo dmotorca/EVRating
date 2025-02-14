@@ -25,30 +25,23 @@ interface PieChartProps {
 
 const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
   const co2WithFactor = parseInt(personalco2) * parseInt(milesDriven);
-  const workingAverage = 400 * parseInt(milesDriven);
+  const workingAverage = 402 * parseInt(milesDriven);
   const evEmissions = 1224699;
-  console.log(workingAverage);
-
-  console.log(
-    'User Vehicle produces: ',
-    co2WithFactor,
-    'Co2 emissions per mile'
-  );
 
   const chartData = [
     {
       browser: 'user',
-      emissions: co2WithFactor * 7,
+      Emissions: co2WithFactor * 7,
       fill: 'var(--color-user)',
     },
     {
       browser: 'ev',
-      emissions: evEmissions * 7,
+      Emissions: evEmissions * 7,
       fill: 'var(--color-ev)',
     },
     {
       browser: 'average',
-      emissions: workingAverage * 7,
+      Emissions: workingAverage * 7,
       fill: 'var(--color-average)',
     },
   ];
@@ -56,11 +49,11 @@ const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
   const chartConfig = {
     user: {
       label: 'Selected Vehicle',
-      color: 'hsl(var(--chart-1))',
+      color: 'hsl(var(--chart-4))',
     },
     average: {
       label: 'Average Vehicle',
-      color: 'hsl(var(--chart-3))',
+      color: 'hsl(var(--chart-6))',
     },
     ev: {
       label: 'EV Vehicle',
@@ -77,11 +70,12 @@ const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart
+            className="font-bold"
             accessibilityLayer
             data={chartData}
             layout="vertical"
             margin={{
-              left: 6,
+              left: 3,
             }}
           >
             <YAxis
@@ -94,21 +88,32 @@ const PieChart: React.FC<PieChartProps> = ({ personalco2, milesDriven }) => {
                 chartConfig[value as keyof typeof chartConfig]?.label
               }
             />
-            <XAxis dataKey="emissions" type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="emissions" layout="vertical" radius={15} />
+            <XAxis dataKey="Emissions" type="number" hide />
+            <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
+            <Bar dataKey="Emissions" layout="vertical" radius={10} />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          {co2WithFactor > workingAverage ? (
+            <div className="font-semibold text-red-600">
+              Your vehicle emits more CO2 than the average vehicle
+            </div>
+          ) : (
+            <div className="font-semibold text-green-600">
+              Your vehicle emits less CO2 than the average vehicle
+            </div>
+          )}
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          {co2WithFactor > workingAverage ? (
+            <div>Your vehicle emits {workingAverage - co2WithFactor} </div>
+          ) : (
+            <div className="">
+              <div> Nice Job!</div>
+            </div>
+          )}
         </div>
       </CardFooter>
     </Card>
