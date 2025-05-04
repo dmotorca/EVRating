@@ -163,8 +163,9 @@ const VehicleSelectorPage = () => {
   ];
 
   return (
-    <div className="flex flex-col lg:flex-row lg:gap-4 lg:justify-center lg:items-start">
+    <div className="flex flex-col  lg:flex-col lg:gap-4 lg:justify-center lg:items-center ">
       <Selector optionsYears={years} optionsMakes={makes} />
+      <div className="pt-2"></div>
     </div>
   );
 };
