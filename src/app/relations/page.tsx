@@ -4,7 +4,7 @@ import React from 'react';
 const page = () => {
   return (
     <div>
-      <Relation personalco2="15000" />
+      <Relation personalco2="6000000" />
     </div>
   );
 };
